@@ -1,5 +1,8 @@
 using System.Diagnostics.Eventing.Reader;
-
+using System.Windows.Forms;
+using veritabanı_ui.forms;
+using veritabanı_ui.models;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 namespace veritabanı_ui
 {
     public partial class Form1 : Form
@@ -20,46 +23,77 @@ namespace veritabanı_ui
         }
 
         private void giris_Click(object sender, EventArgs e)
-        {
-           
-        
+        { 
             // 1. ADIM: Boşluk Kontrolü
             if (string.IsNullOrWhiteSpace(Eposta.Text) || string.IsNullOrWhiteSpace(Sifre.Text))
             {
-                MessageBox.Show("Lütfen e-posta ve şifre alanlarını doldurun.");
-                return; // Hata burada çözülüyor: Kodun geri kalanını çalıştırma!
+                MessageBox.Show("Lütfen e-posta ve şifre alanlarını doldurun.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            // 2. ADIM: Rol Kontrolü
-            if (Ogrenci.Checked) // "== true" yazmana gerek yok, Checked zaten true/false döner
+            string girilenEmail = Eposta.Text;
+            string girilenSifre = Sifre.Text;
+
+            // 2. ADIM: Admin Seçiliyse (Yeni butonun adı muhtemelen radioButton3)
+            if (admin.Checked)
             {
-                if (Eposta.Text.Trim() == "123" && Sifre.Text.Trim() == "123")
+                if (girilenEmail == "admin@deu.edu.tr" && girilenSifre == "123")
                 {
-                    MessageBox.Show("Öğrenci olarak giriş yapıldı.");
-                    // Buraya öğrenci panelini açacak kodu yazabilirsin.
+                    adminpaneli adminForm = new adminpaneli();
+                    adminForm.Show();
+                    this.Hide();
                 }
                 else
                 {
-                    MessageBox.Show("Öğrenci bilgileri hatalı.");
+                    MessageBox.Show("Admin e-posta veya şifresi hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else // Öğrenci seçili değilse Öğretmen varsayıyoruz
+            // 3. ADIM: Öğretmen Seçiliyse
+            else if (Ogretmen.Checked)
             {
-                if (Eposta.Text.Trim() == "456" && Sifre.Text.Trim() == "456")
+                if (girilenEmail == "hoca@deu.edu.tr" && girilenSifre == "123")
                 {
-                    MessageBox.Show("Öğretmen olarak giriş yapıldı.");
-                    // Buraya öğretmen panelini açacak kodu yazabilirsin.
+                    ogretmenpaneli ogretmenForm = new ogretmenpaneli();
+                    ogretmenForm.Show();
+                    this.Hide();
                 }
                 else
                 {
-                    MessageBox.Show("Öğretmen bilgileri hatalı.");
+                    MessageBox.Show("Öğretmen e-posta veya şifresi hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+            // 4. ADIM: Öğrenci Seçiliyse
+            else if (Ogrenci.Checked)
+            {
+                if (girilenEmail == "ogrenci@deu.edu.tr" && girilenSifre == "123")
+                {
+                    // Veritabanı yokken sistemi kandırıyoruz: Sahte bir kargo paketi oluşturduk!
+                    ogrenci sahteOgrenci = new ogrenci();
+                    sahteOgrenci.Ad = "Ahmet";
+                    sahteOgrenci.Soyad = "Yılmaz";
+
+                    // Paketi diğer forma gönderiyoruz
+                    ogrencipaneli ogrenciForm = new ogrencipaneli(sahteOgrenci);
+                    ogrenciForm.Show();
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Öğrenci e-posta veya şifresi hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            // 5. ADIM: Hiçbir Rol Seçilmediyse (Güvenlik Önlemi)
+            else
+            {
+                MessageBox.Show("Lütfen giriş yapmak için bir rol (Admin, Öğretmen veya Öğrenci) seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-               
-                
-            
         
+
+
+
+
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -82,6 +116,11 @@ namespace veritabanı_ui
         }
 
         private void Epostabaslık_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void admin_CheckedChanged(object sender, EventArgs e)
         {
 
         }

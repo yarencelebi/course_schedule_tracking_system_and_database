@@ -37,6 +37,7 @@
             Ogretmen = new RadioButton();
             Ogrenci = new RadioButton();
             Anabaslık = new Label();
+            admin = new RadioButton();
             SuspendLayout();
             // 
             // Eposta
@@ -133,6 +134,18 @@
             Anabaslık.TabIndex = 7;
             Anabaslık.Text = "DERS PROGRAMI TAKİP SİSTEMİ";
             // 
+            // admin
+            // 
+            admin.AutoSize = true;
+            admin.Location = new Point(945, 426);
+            admin.Name = "admin";
+            admin.Size = new Size(79, 27);
+            admin.TabIndex = 8;
+            admin.TabStop = true;
+            admin.Text = "admin";
+            admin.UseVisualStyleBackColor = true;
+            admin.CheckedChanged += admin_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(9F, 23F);
@@ -141,6 +154,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(1260, 647);
+            Controls.Add(admin);
             Controls.Add(Anabaslık);
             Controls.Add(Ogrenci);
             Controls.Add(Ogretmen);
@@ -172,7 +186,6 @@
         private RadioButton Ogretmen;
         private RadioButton Ogrenci;
         private Label Anabaslık;
-
-
+        private RadioButton admin;
     }
 }
