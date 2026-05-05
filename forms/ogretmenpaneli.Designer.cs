@@ -39,18 +39,19 @@
             // lblyazi
             // 
             lblyazi.AutoSize = true;
-            lblyazi.Font = new Font("Segoe UI", 20F);
-            lblyazi.Location = new Point(3, 21);
+            lblyazi.Font = new Font("Segoe UI", 16F);
+            lblyazi.Location = new Point(38, 9);
             lblyazi.Name = "lblyazi";
-            lblyazi.Size = new Size(109, 46);
+            lblyazi.Size = new Size(90, 37);
             lblyazi.TabIndex = 0;
             lblyazi.Text = "label1";
+            lblyazi.Click += lblyazi_Click;
             // 
             // dgvhocaprogram
             // 
             dgvhocaprogram.BackgroundColor = SystemColors.Control;
             dgvhocaprogram.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvhocaprogram.Location = new Point(12, 81);
+            dgvhocaprogram.Location = new Point(12, 122);
             dgvhocaprogram.Name = "dgvhocaprogram";
             dgvhocaprogram.ReadOnly = true;
             dgvhocaprogram.RowHeadersWidth = 51;
@@ -63,10 +64,10 @@
             // lblogrencilist
             // 
             lblogrencilist.AutoSize = true;
-            lblogrencilist.Font = new Font("Segoe UI", 20F);
-            lblogrencilist.Location = new Point(494, 21);
+            lblogrencilist.Font = new Font("Segoe UI", 16F);
+            lblogrencilist.Location = new Point(550, 9);
             lblogrencilist.Name = "lblogrencilist";
-            lblogrencilist.Size = new Size(109, 46);
+            lblogrencilist.Size = new Size(90, 37);
             lblogrencilist.TabIndex = 2;
             lblogrencilist.Text = "label1";
             lblogrencilist.Click += lblogrencilist_Click;
@@ -75,7 +76,7 @@
             // 
             dgvogrencilist.BackgroundColor = SystemColors.Control;
             dgvogrencilist.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvogrencilist.Location = new Point(494, 81);
+            dgvogrencilist.Location = new Point(526, 122);
             dgvogrencilist.Name = "dgvogrencilist";
             dgvogrencilist.ReadOnly = true;
             dgvogrencilist.RowHeadersWidth = 51;

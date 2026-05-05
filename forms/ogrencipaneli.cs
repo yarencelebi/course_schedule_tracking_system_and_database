@@ -36,5 +36,10 @@ namespace veritabanı_ui.forms
         {
 
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

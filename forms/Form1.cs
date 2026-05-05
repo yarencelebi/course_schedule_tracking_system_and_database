@@ -35,21 +35,10 @@ namespace veritabanı_ui
             string girilenSifre = Sifre.Text;
 
             // 2. ADIM: Admin Seçiliyse (Yeni butonun adı muhtemelen radioButton3)
-            if (admin.Checked)
-            {
-                if (girilenEmail == "admin@deu.edu.tr" && girilenSifre == "123")
-                {
-                    adminpaneli adminForm = new adminpaneli();
-                    adminForm.Show();
-                    this.Hide();
-                }
-                else
-                {
-                    MessageBox.Show("Admin e-posta veya şifresi hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            
+            
             // 3. ADIM: Öğretmen Seçiliyse
-            else if (Ogretmen.Checked)
+            if (Ogretmen.Checked)
             {
                 if (girilenEmail == "hoca@deu.edu.tr" && girilenSifre == "123")
                 {
@@ -123,9 +112,6 @@ namespace veritabanı_ui
 
         }
 
-        private void admin_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
+       
     }
 }

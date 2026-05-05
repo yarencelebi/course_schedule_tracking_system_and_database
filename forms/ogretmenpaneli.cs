@@ -95,6 +95,11 @@ namespace veritabanı_ui.forms
         {
 
         }
+
+        private void lblyazi_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
         
