@@ -37,11 +37,12 @@
             // 
             lblhosgeldin.AutoSize = true;
             lblhosgeldin.Font = new Font("Segoe UI", 15F);
-            lblhosgeldin.Location = new Point(369, 74);
+            lblhosgeldin.Location = new Point(462, 71);
             lblhosgeldin.Name = "lblhosgeldin";
             lblhosgeldin.Size = new Size(81, 35);
             lblhosgeldin.TabIndex = 0;
             lblhosgeldin.Text = "label1";
+            lblhosgeldin.TextAlign = ContentAlignment.TopCenter;
             // 
             // dgvdersprogrami
             // 
@@ -52,7 +53,7 @@
             dgvdersprogrami.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvdersprogrami.BackgroundColor = SystemColors.Control;
             dgvdersprogrami.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvdersprogrami.Location = new Point(337, 172);
+            dgvdersprogrami.Location = new Point(179, 232);
             dgvdersprogrami.Name = "dgvdersprogrami";
             dgvdersprogrami.ReadOnly = true;
             dgvdersprogrami.RowHeadersVisible = false;
@@ -68,6 +69,7 @@
             Controls.Add(dgvdersprogrami);
             Controls.Add(lblhosgeldin);
             Name = "ogrencipaneli";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "ogrencipaneli";
             Load += ogrencipaneli_Load;
             ((System.ComponentModel.ISupportInitialize)dgvdersprogrami).EndInit();

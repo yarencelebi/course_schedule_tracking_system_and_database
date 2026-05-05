@@ -53,8 +53,11 @@ namespace veritabanı_ui
             {
                 if (girilenEmail == "hoca@deu.edu.tr" && girilenSifre == "123")
                 {
-                    ogretmenpaneli ogretmenForm = new ogretmenpaneli();
-                    ogretmenForm.Show();
+                    ogretmen sahteHoca = new ogretmen();
+                    sahteHoca.Ad = "Nazım";
+                    sahteHoca.Soyad = "Hoca";
+                    ogretmenpaneli hocaForm = new ogretmenpaneli(sahteHoca);
+                    hocaForm.Show();
                     this.Hide();
                 }
                 else

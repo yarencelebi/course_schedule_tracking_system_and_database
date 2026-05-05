@@ -4,7 +4,7 @@ using System.Text;
 
 namespace veritabanı_ui.models
 {
-    internal class sinif
+    public class sinif
     {
         public int SinifID { get; set; }
         public string SinifAdi { get; set; } // Örn: "Amfi-1", "D-102", "Bilgisayar Lab"

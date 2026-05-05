@@ -4,7 +4,7 @@ using System.Text;
 
 namespace veritabanı_ui.models
 {
-    internal class dersprogrami
+    public class dersprogrami
     {
         public int ProgramID { get; set; }
         public int DersID { get; set; }

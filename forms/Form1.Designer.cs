@@ -153,7 +153,7 @@
             BackColor = Color.White;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.None;
-            ClientSize = new Size(1260, 647);
+            ClientSize = new Size(1255, 598);
             Controls.Add(admin);
             Controls.Add(Anabaslık);
             Controls.Add(Ogrenci);

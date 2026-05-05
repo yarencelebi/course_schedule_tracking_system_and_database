@@ -4,7 +4,7 @@ using System.Text;
 
 namespace veritabanı_ui.models
 {
-    internal class ders
+    public class ders
     {
         
     
