@@ -3,10 +3,15 @@ using System.Windows.Forms;
 using veritabanı_ui.forms;
 using veritabanı_ui.models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
+using System.Data;
+using System.Data.SqlClient;
+
 namespace veritabanı_ui
+
 {
     public partial class Form1 : Form
     {
+        string baglantiCumlesi = @"Server=.\SQLEXPRESS; Database=DersProgramiDB; Integrated Security=True;";
         public Form1()
         {
             InitializeComponent();
@@ -35,46 +40,94 @@ namespace veritabanı_ui
             string girilenSifre = Sifre.Text;
 
             // 2. ADIM: Admin Seçiliyse (Yeni butonun adı muhtemelen radioButton3)
-            
-            
+
+
             // 3. ADIM: Öğretmen Seçiliyse
             if (Ogretmen.Checked)
             {
-                if (girilenEmail == "hoca@deu.edu.tr" && girilenSifre == "123")
+                using (SqlConnection baglanti = new SqlConnection(baglantiCumlesi))
                 {
-                    ogretmen sahteHoca = new ogretmen();
-                    sahteHoca.Ad = "Nazım";
-                    sahteHoca.Soyad = "Hoca";
-                    ogretmenpaneli hocaForm = new ogretmenpaneli(sahteHoca);
-                    hocaForm.Show();
-                    this.Hide();
-                }
-                else
-                {
-                    MessageBox.Show("Öğretmen e-posta veya şifresi hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    baglanti.Open();
+                    // Öğretmenin sadece varlığını değil, ID ve isim bilgilerini de istiyoruz
+                    // Sorguyu bu şekilde güncelle: Kullanicilar (K) ile Ogretmenler (O) tablolarını bağlıyoruz
+                    string sorgu = @"SELECT O.OgretmenID, O.Ad, O.Soyad 
+                FROM Kullanicilar K 
+                JOIN Ogretmenler O ON K.KullaniciID = O.KullaniciID 
+                WHERE K.Email=@email AND K.Sifre=@sifre AND K.Rol='Ogretmen'";
+
+                    using (SqlCommand komut = new SqlCommand(sorgu, baglanti))
+                    {
+                        komut.Parameters.AddWithValue("@email", girilenEmail);
+                        komut.Parameters.AddWithValue("@sifre", girilenSifre);
+
+                        using (SqlDataReader dr = komut.ExecuteReader())
+                        {
+                            if (dr.Read())
+                            {
+                                // 1. Yeni bir öğretmen nesnesi oluşturup içini dolduruyoruz
+                                models.ogretmen hocaGiris = new models.ogretmen();
+                                hocaGiris.OgretmenID = Convert.ToInt32(dr["OgretmenID"]);
+                                hocaGiris.Ad = dr["Ad"].ToString();
+                                hocaGiris.Soyad = dr["Soyad"].ToString();
+
+                                // 2. null yerine artık dolu olan 'hocaGiris' paketini gönderiyoruz
+                                ogretmenpaneli hocaForm = new ogretmenpaneli(hocaGiris);
+                                hocaForm.Show();
+                                this.Hide();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Öğretmen e-posta veya şifresi hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
                 }
             }
-            // 4. ADIM: Öğrenci Seçiliyse
+            
             else if (Ogrenci.Checked)
             {
-                if (girilenEmail == "ogrenci@deu.edu.tr" && girilenSifre == "123")
+                using (SqlConnection baglanti = new SqlConnection(baglantiCumlesi))
                 {
-                    // Veritabanı yokken sistemi kandırıyoruz: Sahte bir kargo paketi oluşturduk!
-                    ogrenci sahteOgrenci = new ogrenci();
-                    sahteOgrenci.Ad = "Ahmet";
-                    sahteOgrenci.Soyad = "Yılmaz";
+                    baglanti.Open();
+                    
+                    
+                    string sorgu = @"SELECT S.OgrenciID, S.Ad, S.Soyad, S.Bolum 
+                FROM Kullanicilar K 
+                JOIN Ogrenciler S ON K.KullaniciID = S.KullaniciID 
+                WHERE K.Email=@email AND K.Sifre=@sifre AND K.Rol='Ogrenci'";
+                    using (SqlCommand komut = new SqlCommand(sorgu, baglanti))
+                    {
+                        komut.Parameters.AddWithValue("@email", girilenEmail);
+                        komut.Parameters.AddWithValue("@sifre", girilenSifre);
 
-                    // Paketi diğer forma gönderiyoruz
-                    ogrencipaneli ogrenciForm = new ogrencipaneli(sahteOgrenci);
-                    ogrenciForm.Show();
-                    this.Hide();
-                }
-                else
-                {
-                    MessageBox.Show("Öğrenci e-posta veya şifresi hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        
+                        using (SqlDataReader dr = komut.ExecuteReader())
+                        {
+                           
+                            if (dr.Read())
+                            {
+                                
+                                models.ogrenci girisYapan = new models.ogrenci();
+                                girisYapan.OgrenciID = Convert.ToInt32(dr["OgrenciID"]);
+                                girisYapan.Ad = dr["Ad"].ToString();
+                                girisYapan.Soyad = dr["Soyad"].ToString();
+                                girisYapan.Bolum = dr["Bolum"].ToString();
+                                
+                                
+                                ogrencipaneli ogrenciForm = new ogrencipaneli(girisYapan);
+                                ogrenciForm.Show();
+                                this.Hide();
+                            }
+                            else
+                            {
+                                
+                                MessageBox.Show("Öğrenci e-posta veya şifresi hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
                 }
             }
-            // 5. ADIM: Hiçbir Rol Seçilmediyse (Güvenlik Önlemi)
+            
             else
             {
                 MessageBox.Show("Lütfen giriş yapmak için bir rol (Admin, Öğretmen veya Öğrenci) seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);

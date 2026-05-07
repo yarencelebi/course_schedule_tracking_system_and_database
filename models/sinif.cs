@@ -7,7 +7,7 @@ namespace veritabanı_ui.models
     public class sinif
     {
         public int SinifID { get; set; }
-        public string SinifAdi { get; set; } // Örn: "Amfi-1", "D-102", "Bilgisayar Lab"
+        public string SinifAdi { get; set; } 
         public int Kapasite { get; set; }
     }
 }
