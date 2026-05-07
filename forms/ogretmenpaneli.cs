@@ -6,31 +6,49 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using veritabanı_ui.models;
+using System.Data.SqlClient;
 
 namespace veritabanı_ui.forms
 {
     public partial class ogretmenpaneli : Form
     {
+        string baglantiCumlesi = @"Server=.\SQLEXPRESS; Database=DersProgramiDB; Integrated Security=True;";
         private ogretmen aktifOgretmen;
-        public ogretmenpaneli(ogretmen gelenOgretmen)
+
+        public ogretmenpaneli(models.ogretmen gelenOgretmen)
         {
             InitializeComponent();
             aktifOgretmen = gelenOgretmen;// Güvenlik kontrolü (Hoca boş gelirse patlamasın)
             if (aktifOgretmen != null)
             {
-                lblyazi.Text = $"Sayın {aktifOgretmen.Ad} {aktifOgretmen.Soyad}, Hoş Geldiniz";
+                lblyazi.Text = "Sayın " + aktifOgretmen.Ad + " " + aktifOgretmen.Soyad + " Hoş Geldiniz";
             }
 
             ProgramiGetir();
         }
+        private DataTable VeriGetir(string sorgu)
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection baglanti = new SqlConnection(baglantiCumlesi))
+            {
+                using (SqlCommand komut = new SqlCommand(sorgu, baglanti))
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(komut);
+                    da.Fill(dt);
+                }
+            }
+            return dt;
+        }
         private void ProgramiGetir()
         {
-            var sahteDersler = new List<object>
-            {
-                new { DersID = 1, DersAdi = "Veritabanı Yönetimi", Gun = "Pazartesi" },
-                new { DersID = 2, DersAdi = "Nümerik Analiz", Gun = "Salı" }
-            };
-            dgvhocaprogram.DataSource = sahteDersler;
+            string sorgu = @"SELECT d.DersKodu, d.DersAdi, s.SinifAdi, dp.Gun, 
+                    (CONVERT(varchar(5), dp.BaslangicSaat) + ' - ' + CONVERT(varchar(5), dp.BitisSaat)) as Saat
+                    FROM DersProgrami dp
+                    JOIN Dersler d ON dp.DersID = d.DersID
+                    JOIN Siniflar s ON dp.SinifID = s.SinifID
+                    WHERE dp.OgretmenID = 1";
+            DataTable gelenVeri = VeriGetir(sorgu);
+            dgvhocaprogram.DataSource = gelenVeri;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -50,18 +68,50 @@ namespace veritabanı_ui.forms
 
         private void dgvhocaprogram_SelectionChanged(object sender, EventArgs e)
         {
-
-            if (dgvhocaprogram.SelectedRows.Count > 0)
+            // 1. Üst tablodan bir ders seçili mi diye kontrol ediyoruz (Burası aynı)
+            if (dgvhocaprogram.SelectedRows.Count > 0 && dgvhocaprogram.SelectedRows[0].DataBoundItem != null)
             {
-                // Seçili satırdan hem ID'yi hem de DERS ADINI alıyoruz
-                var seciliDersId = dgvhocaprogram.SelectedRows[0].Cells["DersID"].Value.ToString();
-                var seciliDersAdi = dgvhocaprogram.SelectedRows[0].Cells["DersAdi"].Value.ToString();
+                DataRowView seciliSatir = (DataRowView)dgvhocaprogram.SelectedRows[0].DataBoundItem;
+                string seciliDersKodu = seciliSatir["DersKodu"].ToString();
+                string seciliDersAdi = seciliSatir["DersAdi"].ToString();
 
-                // Metodu iki parametreyle çağırıyoruz
-                OgrencileriGetir(seciliDersId, seciliDersAdi);
+                lblogrencilist.Text = seciliDersAdi + " Dersi Öğrenci Listesi";
+
+                // 2. SQL'den öğrencileri getirecek siparişimizi hazırlayıp ham veriyi çekiyoruz
+                string sorgu = $@"SELECT o.Ad, o.Soyad, o.Bolum 
+                          FROM DersKayitlari dk
+                          JOIN Ogrenciler o ON dk.OgrenciID = o.OgrenciID
+                          JOIN Dersler d ON dk.DersID = d.DersID
+                          WHERE d.DersKodu = '{seciliDersKodu}'";
+
+                DataTable hamVeri = VeriGetir(sorgu);
+
+                // --- İŞTE BURADA MODELLER DEVREYE GİRİYOR ---
+
+                // 3. Modellerimizi tutacağımız boş bir liste oluşturuyoruz
+                List<models.ogrenci> ogrenciListesi = new List<models.ogrenci>();
+
+                // 4. SQL'den gelen her bir satırı dönüyoruz
+                foreach (DataRow satir in hamVeri.Rows)
+                {
+                    // Senin yazdığın 'ogrenci' modelinden yeni bir nesne (paket) oluşturuyoruz
+                    models.ogrenci yeniOgrenci = new models.ogrenci();
+
+                    // SQL'den gelen verileri modele aktarıyoruz
+                    yeniOgrenci.Ad = satir["Ad"].ToString();
+                    yeniOgrenci.Soyad = satir["Soyad"].ToString();
+                    yeniOgrenci.Bolum = satir["Bolum"].ToString();
+
+                    // Doldurduğumuz bu modeli listeye ekliyoruz
+                    ogrenciListesi.Add(yeniOgrenci);
+                }
+
+                // 5. Son olarak, ham veriyi DEĞİL, kendi oluşturduğumuz model listesini tabloya veriyoruz
+                dgvogrencilist.DataSource = ogrenciListesi;
             }
-
         }
+
+        
         private void OgrencileriGetir(string dersId, string dersAdi)
         {
             // 1. Önce öğrenci listesinin üzerindeki başlığı (label) güncelleyelim

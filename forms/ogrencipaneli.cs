@@ -6,30 +6,55 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using veritabanı_ui.models;
+using System.Data.SqlClient;
 
 namespace veritabanı_ui.forms
 {
     public partial class ogrencipaneli : Form
     {
+        string baglantiCumlesi = @"Server=.\SQLEXPRESS; Database=DersProgramiDB; Integrated Security=True;";
         private ogrenci aktifOgrenci;
         public ogrencipaneli(ogrenci gelenogrenci)
         {
             InitializeComponent();
-
-
-            // 3. Kapıdan giren paketi rafımıza koyduk
             aktifOgrenci = gelenogrenci;
 
-            // 4. Paketin içindeki isim ve soyismi ekrandaki Label'a yazdırdık
-            lblhosgeldin.Text = "Hoş geldin, " + aktifOgrenci.Ad + " " + aktifOgrenci.Soyad;
-
-            var sahteProgram = new List<object>
+            // 1. Çökme Koruması: Eğer dışarıdan boş paket (null) gelmediyse ismi yazdır
+            if (aktifOgrenci != null)
             {
-                new { Gun = "Pazartesi", Saat = "09:00 - 11:00", Ders = "Nesne Yönelimli Programlama", Sinif = "Amfi-1", Hoca = "Prof. Dr. Nazım" },
-                new { Gun = "Pazartesi", Saat = "13:00 - 15:00", Ders = "Veritabanı Yönetimi", Sinif = "Lab-3", Hoca = "Dr. Ayşe Yılmaz" },
-                new { Gun = "Çarşamba", Saat = "10:00 - 12:00", Ders = "Nümerik Analiz", Sinif = "D-102", Hoca = "Doç. Dr. Ali Veli" }
-            };
-            dgvdersprogrami.DataSource = sahteProgram;
+                lblhosgeldin.Text = "Hoş geldin, " + aktifOgrenci.Ad + " " + aktifOgrenci.Soyad + " (" + aktifOgrenci.Bolum + ")";
+            }
+            else
+            {
+                lblhosgeldin.Text = "Hoş geldin, Test Öğrencisi";
+            }
+
+            // 2. SQL'den Gerçek Dersleri Çekme
+            // Not: Şimdilik test için 1 numaralı öğrenciyi (Ali'yi) çağırıyoruz. 
+            // Form1'i tam bağladığımızda burayı aktifOgrenci.OgrenciID olarak değiştireceğiz.
+            int gercekID = aktifOgrenci.OgrenciID;
+
+            // Arkadaşının yazdığı o hazır prosedürü (sp_OgrenciDersleri) çalıştırıyoruz
+            string sorgu = "EXEC sp_OgrenciDersleri @OgrenciID";
+            SqlParameter parametre = new SqlParameter("@OgrenciID", gercekID);
+
+            // Gelen gerçek ders tablosunu arayüze bağlıyoruz
+            dgvdersprogrami.DataSource = VeriGetir(sorgu, parametre);
+
+        }
+        private DataTable VeriGetir(string sorgu, SqlParameter p = null)
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection baglanti = new SqlConnection(baglantiCumlesi))
+            {
+                using (SqlCommand komut = new SqlCommand(sorgu, baglanti))
+                {
+                    if (p != null) komut.Parameters.Add(p);
+                    SqlDataAdapter da = new SqlDataAdapter(komut);
+                    da.Fill(dt);
+                }
+            }
+            return dt;
         }
 
         private void ogrencipaneli_Load(object sender, EventArgs e)
