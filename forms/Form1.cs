@@ -83,14 +83,14 @@ namespace veritabanı_ui
                     }
                 }
             }
-            // 4. ADIM: Öğrenci Seçiliyse
+            
             else if (Ogrenci.Checked)
             {
                 using (SqlConnection baglanti = new SqlConnection(baglantiCumlesi))
                 {
                     baglanti.Open();
-                    // Sadece saymıyoruz (COUNT), bize ID, Ad ve Soyadı da getir diyoruz
-                    // Aynı mantık: Kullanicilar (K) ile Ogrenciler (S) tablolarını bağlıyoruz
+                    
+                    
                     string sorgu = @"SELECT S.OgrenciID, S.Ad, S.Soyad, S.Bolum 
                 FROM Kullanicilar K 
                 JOIN Ogrenciler S ON K.KullaniciID = S.KullaniciID 
@@ -100,34 +100,34 @@ namespace veritabanı_ui
                         komut.Parameters.AddWithValue("@email", girilenEmail);
                         komut.Parameters.AddWithValue("@sifre", girilenSifre);
 
-                        // 'dr' (Data Reader) burada devreye giriyor, satır satır okuma yapar
+                        
                         using (SqlDataReader dr = komut.ExecuteReader())
                         {
-                            // Eğer SQL'den bir satır okuyabildiyse (Giriş başarılıysa)
+                           
                             if (dr.Read())
                             {
-                                // 1. Yeni bir öğrenci nesnesi oluşturup içini dolduruyoruz
+                                
                                 models.ogrenci girisYapan = new models.ogrenci();
                                 girisYapan.OgrenciID = Convert.ToInt32(dr["OgrenciID"]);
                                 girisYapan.Ad = dr["Ad"].ToString();
                                 girisYapan.Soyad = dr["Soyad"].ToString();
                                 girisYapan.Bolum = dr["Bolum"].ToString();
 
-                                // 2. Şimdi bu dolu paketi yan sayfaya gönderiyoruz
+                                
                                 ogrencipaneli ogrenciForm = new ogrencipaneli(girisYapan);
                                 ogrenciForm.Show();
                                 this.Hide();
                             }
                             else
                             {
-                                // dr.Read() başarısızsa kullanıcı bulunamamıştır
+                                
                                 MessageBox.Show("Öğrenci e-posta veya şifresi hatalı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                     }
                 }
             }
-            // 5. ADIM: Hiçbir Rol Seçilmediyse (Güvenlik Önlemi)
+            
             else
             {
                 MessageBox.Show("Lütfen giriş yapmak için bir rol (Admin, Öğretmen veya Öğrenci) seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);

@@ -32,6 +32,7 @@
             dgvhocaprogram = new DataGridView();
             lblogrencilist = new Label();
             dgvogrencilist = new DataGridView();
+            refresh = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvhocaprogram).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvogrencilist).BeginInit();
             SuspendLayout();
@@ -51,12 +52,12 @@
             // 
             dgvhocaprogram.BackgroundColor = SystemColors.Control;
             dgvhocaprogram.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvhocaprogram.Location = new Point(12, 122);
+            dgvhocaprogram.Location = new Point(38, 95);
             dgvhocaprogram.Name = "dgvhocaprogram";
             dgvhocaprogram.ReadOnly = true;
             dgvhocaprogram.RowHeadersWidth = 51;
             dgvhocaprogram.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvhocaprogram.Size = new Size(462, 368);
+            dgvhocaprogram.Size = new Size(1013, 209);
             dgvhocaprogram.TabIndex = 1;
             dgvhocaprogram.CellContentClick += dataGridView1_CellContentClick;
             dgvhocaprogram.SelectionChanged += dgvhocaprogram_SelectionChanged;
@@ -76,25 +77,38 @@
             // 
             dgvogrencilist.BackgroundColor = SystemColors.Control;
             dgvogrencilist.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvogrencilist.Location = new Point(526, 122);
+            dgvogrencilist.Location = new Point(38, 347);
             dgvogrencilist.Name = "dgvogrencilist";
             dgvogrencilist.ReadOnly = true;
             dgvogrencilist.RowHeadersWidth = 51;
             dgvogrencilist.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvogrencilist.Size = new Size(585, 368);
+            dgvogrencilist.Size = new Size(585, 209);
             dgvogrencilist.TabIndex = 3;
             dgvogrencilist.CellContentClick += dataGridView2_CellContentClick;
             dgvogrencilist.SelectionChanged += dgvogrencilist_SelectionChanged;
+            // 
+            // refresh
+            // 
+            refresh.Font = new Font("Segoe UI", 15F);
+            refresh.Location = new Point(764, 390);
+            refresh.Name = "refresh";
+            refresh.Size = new Size(186, 87);
+            refresh.TabIndex = 4;
+            refresh.Text = "sayfayı yenile";
+            refresh.UseVisualStyleBackColor = true;
+            refresh.Click += refresh_Click;
             // 
             // ogretmenpaneli
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1133, 598);
+            ClientSize = new Size(1099, 598);
+            Controls.Add(refresh);
             Controls.Add(dgvogrencilist);
             Controls.Add(lblogrencilist);
             Controls.Add(dgvhocaprogram);
             Controls.Add(lblyazi);
+            Font = new Font("Segoe UI", 9F);
             Name = "ogretmenpaneli";
             Text = "ogretmenpaneli";
             Load += ogretmenpaneli_Load;
@@ -110,5 +124,6 @@
         private DataGridView dgvhocaprogram;
         private Label lblogrencilist;
         private DataGridView dgvogrencilist;
+        private Button refresh;
     }
 }

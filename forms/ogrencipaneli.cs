@@ -19,7 +19,7 @@ namespace veritabanı_ui.forms
             InitializeComponent();
             aktifOgrenci = gelenogrenci;
 
-            // 1. Çökme Koruması: Eğer dışarıdan boş paket (null) gelmediyse ismi yazdır
+            
             if (aktifOgrenci != null)
             {
                 lblhosgeldin.Text = "Hoş geldin, " + aktifOgrenci.Ad + " " + aktifOgrenci.Soyad + " (" + aktifOgrenci.Bolum + ")";
@@ -29,16 +29,13 @@ namespace veritabanı_ui.forms
                 lblhosgeldin.Text = "Hoş geldin, Test Öğrencisi";
             }
 
-            // 2. SQL'den Gerçek Dersleri Çekme
-            // Not: Şimdilik test için 1 numaralı öğrenciyi (Ali'yi) çağırıyoruz. 
-            // Form1'i tam bağladığımızda burayı aktifOgrenci.OgrenciID olarak değiştireceğiz.
             int gercekID = aktifOgrenci.OgrenciID;
 
-            // Arkadaşının yazdığı o hazır prosedürü (sp_OgrenciDersleri) çalıştırıyoruz
+            
             string sorgu = "EXEC sp_OgrenciDersleri @OgrenciID";
             SqlParameter parametre = new SqlParameter("@OgrenciID", gercekID);
 
-            // Gelen gerçek ders tablosunu arayüze bağlıyoruz
+            
             dgvdersprogrami.DataSource = VeriGetir(sorgu, parametre);
 
         }
@@ -65,6 +62,34 @@ namespace veritabanı_ui.forms
         private void pictureBox1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+            if (this.aktifOgrenci != null)
+            {
+                using (SqlConnection baglanti = new SqlConnection(baglantiCumlesi))
+                {
+                    
+                    SqlCommand komut = new SqlCommand("sp_OgrenciDersleri", baglanti);
+                    komut.CommandType = CommandType.StoredProcedure; 
+
+                    
+                    komut.Parameters.AddWithValue("@OgrenciID", aktifOgrenci.OgrenciID);
+
+                    
+                    DataTable dt = new DataTable();
+                    SqlDataAdapter da = new SqlDataAdapter(komut);
+
+                    baglanti.Open();
+                    da.Fill(dt);
+                    dgvdersprogrami.DataSource = dt; 
+                    baglanti.Close();
+                }
+
+                MessageBox.Show("Ders programın başarıyla güncellendi!", "Bilgi");
+            }
         }
     }
 }
