@@ -85,7 +85,7 @@
             button1.Name = "button1";
             button1.Size = new Size(234, 105);
             button1.TabIndex = 3;
-            button1.Text = "programı yenile";
+            button1.Text = "refresh";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 

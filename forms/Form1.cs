@@ -112,7 +112,7 @@ namespace veritabanı_ui
                                 girisYapan.Ad = dr["Ad"].ToString();
                                 girisYapan.Soyad = dr["Soyad"].ToString();
                                 girisYapan.Bolum = dr["Bolum"].ToString();
-
+                                
                                 
                                 ogrencipaneli ogrenciForm = new ogrencipaneli(girisYapan);
                                 ogrenciForm.Show();

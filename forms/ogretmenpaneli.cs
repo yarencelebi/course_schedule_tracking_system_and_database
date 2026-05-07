@@ -39,7 +39,7 @@ namespace veritabanı_ui.forms
             }
             return dt;
         }
-       
+
         private void ProgramiGetir()
         {
             string sorgu = @"SELECT d.DersKodu, d.DersAdi, s.SinifAdi, dp.Gun, 
@@ -69,7 +69,7 @@ namespace veritabanı_ui.forms
 
         private void dgvhocaprogram_SelectionChanged(object sender, EventArgs e)
         {
-            
+
             if (dgvhocaprogram.SelectedRows.Count > 0 && dgvhocaprogram.SelectedRows[0].DataBoundItem != null)
             {
                 DataRowView seciliSatir = (DataRowView)dgvhocaprogram.SelectedRows[0].DataBoundItem;
@@ -78,7 +78,7 @@ namespace veritabanı_ui.forms
 
                 lblogrencilist.Text = seciliDersAdi + " Dersi Öğrenci Listesi";
 
-               
+
                 string sorgu = $@"SELECT o.Ad, o.Soyad, o.Bolum 
                           FROM DersKayitlari dk
                           JOIN Ogrenciler o ON dk.OgrenciID = o.OgrenciID
@@ -87,55 +87,33 @@ namespace veritabanı_ui.forms
 
                 DataTable hamVeri = VeriGetir(sorgu);
 
-                
 
-                
+
+
                 List<models.ogrenci> ogrenciListesi = new List<models.ogrenci>();
 
-                
+
                 foreach (DataRow satir in hamVeri.Rows)
                 {
-                    
+
                     models.ogrenci yeniOgrenci = new models.ogrenci();
 
-                    
+
                     yeniOgrenci.Ad = satir["Ad"].ToString();
                     yeniOgrenci.Soyad = satir["Soyad"].ToString();
                     yeniOgrenci.Bolum = satir["Bolum"].ToString();
-
                     
+
                     ogrenciListesi.Add(yeniOgrenci);
                 }
 
-                
+
                 dgvogrencilist.DataSource = ogrenciListesi;
+                dgvogrencilist.Columns["OgrenciID"].Visible = false;
             }
         }
 
 
-        private void OgrencileriGetir(string dersId, string dersAdi)
-        {
-            
-            lblogrencilist.Text = dersAdi + " Dersi Öğrenci Listesi";
-
-            
-            if (dersId == "1") 
-            {
-                dgvogrencilist.DataSource = new List<object>
-        {
-            new { No = "2026001", Ad = "Ali", Soyad = "Yılmaz", Not = "70" },
-            new { No = "2026002", Ad = "Veli", Soyad = "Kaya", Not = "85" }
-        };
-            }
-            else if (dersId == "2")
-            {
-                dgvogrencilist.DataSource = new List<object>
-        {
-            new { No = "2026003", Ad = "Ayşe", Soyad = "Demir", Not = "90" },
-            new { No = "2026004", Ad = "Fatma", Soyad = "Çelik", Not = "65" }
-        };
-            }
-        }
 
         private void lblogrencilist_Click(object sender, EventArgs e)
         {
@@ -154,11 +132,11 @@ namespace veritabanı_ui.forms
 
         private void refresh_Click(object sender, EventArgs e)
         {
-          
-            
+
+
             using (SqlConnection baglanti = new SqlConnection(baglantiCumlesi))
             {
-                
+
                 string sorgu = @"SELECT d.DersKodu, d.DersAdi, s.SinifAdi, dp.Gun, 
                         (CONVERT(varchar(5), dp.BaslangicSaat) + ' - ' + CONVERT(varchar(5), dp.BitisSaat)) as Saat
                         FROM DersProgrami dp
@@ -169,20 +147,25 @@ namespace veritabanı_ui.forms
                 SqlCommand komut = new SqlCommand(sorgu, baglanti);
                 komut.Parameters.AddWithValue("@hocaID", aktifOgretmen.OgretmenID);
 
-               
+
                 DataTable dt = new DataTable();
                 SqlDataAdapter da = new SqlDataAdapter(komut);
 
                 baglanti.Open();
                 da.Fill(dt);
-                dgvhocaprogram.DataSource = dt; 
+                dgvhocaprogram.DataSource = dt;
                 baglanti.Close();
             }
 
             MessageBox.Show("Liste güncellendi!");
         }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
-    }
+}
 
         
     
