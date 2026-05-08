@@ -12,7 +12,7 @@ namespace veritabanı_ui.forms
 {
     public partial class ogretmenpaneli : Form
     {
-        string baglantiCumlesi = @"Server=.\SQLEXPRESS; Database=DersProgramiDB; Integrated Security=True;";
+        string baglantiCumlesi = @"Server=.\SQLEXPRESS; Database=DersProgramiDB; Integrated Security=True; TrustServerCertificate=True ; ";
         private ogretmen aktifOgretmen;
 
         public ogretmenpaneli(models.ogretmen gelenOgretmen)

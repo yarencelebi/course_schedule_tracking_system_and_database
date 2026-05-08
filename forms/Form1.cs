@@ -11,7 +11,7 @@ namespace veritabanı_ui
 {
     public partial class Form1 : Form
     {
-        string baglantiCumlesi = @"Server=.\SQLEXPRESS; Database=DersProgramiDB; Integrated Security=True;";
+        string baglantiCumlesi = @"Server=.\SQLEXPRESS; Database=DersProgramiDB; Integrated Security=True; TrustServerCertificate=True ;";
         public Form1()
         {
             InitializeComponent();
