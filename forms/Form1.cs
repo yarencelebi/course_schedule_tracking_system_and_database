@@ -29,7 +29,7 @@ namespace veritabanı_ui
 
         private void giris_Click(object sender, EventArgs e)
         { 
-            // 1. ADIM: Boşluk Kontrolü
+            
             if (string.IsNullOrWhiteSpace(Eposta.Text) || string.IsNullOrWhiteSpace(Sifre.Text))
             {
                 MessageBox.Show("Lütfen e-posta ve şifre alanlarını doldurun.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -39,17 +39,15 @@ namespace veritabanı_ui
             string girilenEmail = Eposta.Text;
             string girilenSifre = Sifre.Text;
 
-            // 2. ADIM: Admin Seçiliyse (Yeni butonun adı muhtemelen radioButton3)
+           
 
 
-            // 3. ADIM: Öğretmen Seçiliyse
             if (Ogretmen.Checked)
             {
                 using (SqlConnection baglanti = new SqlConnection(baglantiCumlesi))
                 {
                     baglanti.Open();
-                    // Öğretmenin sadece varlığını değil, ID ve isim bilgilerini de istiyoruz
-                    // Sorguyu bu şekilde güncelle: Kullanicilar (K) ile Ogretmenler (O) tablolarını bağlıyoruz
+                    
                     string sorgu = @"SELECT O.OgretmenID, O.Ad, O.Soyad 
                 FROM Kullanicilar K 
                 JOIN Ogretmenler O ON K.KullaniciID = O.KullaniciID 
@@ -64,13 +62,13 @@ namespace veritabanı_ui
                         {
                             if (dr.Read())
                             {
-                                // 1. Yeni bir öğretmen nesnesi oluşturup içini dolduruyoruz
+                                
                                 models.ogretmen hocaGiris = new models.ogretmen();
                                 hocaGiris.OgretmenID = Convert.ToInt32(dr["OgretmenID"]);
                                 hocaGiris.Ad = dr["Ad"].ToString();
                                 hocaGiris.Soyad = dr["Soyad"].ToString();
 
-                                // 2. null yerine artık dolu olan 'hocaGiris' paketini gönderiyoruz
+                               
                                 ogretmenpaneli hocaForm = new ogretmenpaneli(hocaGiris);
                                 hocaForm.Show();
                                 this.Hide();

@@ -1,5 +1,5 @@
 # course_schedule_tracking_system_and_database
-"A Student Course Schedule Tracking System developed with C# Windows Forms and SQL Server, featuring role-based access for Admins, Teachers, and Students."
+"A Student Course Schedule Tracking System developed with C# Windows Forms and SQL Server, featuring role-based access for  Teachers and Students."
 # Student Course Schedule Tracking System
 
 This project is a desktop application developed for the **BIL 2004 Database Management** course. It aims to manage course schedules, student enrollments, and teacher assignments within a university environment.
@@ -16,7 +16,3 @@ This project is a desktop application developed for the **BIL 2004 Database Mana
 - **Database:** Microsoft SQL Server
 - **Architecture:** N-Tier Architecture (Models, Data, UI)
 
-## 📂 Project Structure
-- `/src`: C# Source code and Form designs.
-- `/sql`: Database creation scripts and stored procedures.
-- `/docs`: ER Diagrams and technical reports.
