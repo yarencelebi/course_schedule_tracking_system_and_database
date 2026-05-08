@@ -1,3 +1,10 @@
+
+ ÇOK ÖNEMLİ 
+ Proje dosyaları internet tabanlı dağıtım (GitHub/LMS) üzerinden iletildiği için Windows güvenlik politikaları gereği .resx dosyalarında erişim engeli oluşabilmektedir. Sorunsuz derleme için arşiv dosyasının 'Özellikler' menüsünden 'Engellemeyi Kaldır' seçeneği aktif edilmelidir.ayrıca sql önden çalıştırılıp server sql express olmalı. 
+
+
+
+
 # course_schedule_tracking_system_and_database
 "A Student Course Schedule Tracking System developed with C# Windows Forms and SQL Server, featuring role-based access for  Teachers and Students."
 # Student Course Schedule Tracking System
